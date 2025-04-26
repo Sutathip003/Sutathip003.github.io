@@ -7,10 +7,6 @@
     <title>Document</title>
 </head>
 
-<form action="/tester" method="POST">
-    <button type="submit">Test</button>
-</form>
-
 <body>
     <main>
         <header>
@@ -19,8 +15,8 @@
 
         <form  action="/submit_bp" method="POST">
 
-            <label> Date
-                <input name="recorded_at" type="datetime-local" >
+            <label> Password
+                <input name="db_password" type="password" placeholder="Your password" required>     
             </label>
             <br><br>
 
@@ -31,15 +27,20 @@
             <br><br>
 
             <label> DIA
-                <input name="diastolic" type="number" placeholder="80" >
+                <input name="diastolic" type="number" placeholder="80" required>
             </label>
             <label>(mmHg)</label>
             <br><br>
 
             <label> Pulse
-                <input name="pulse" type="number" placeholder="72" >
+                <input name="pulse" type="number" placeholder="72" required>
             </label>
             <label>(bpm)</label>
+            <br><br>
+
+            <label>Note
+                <textarea name="note" rows="5" cols="40" placeholder="Type your note here"></textarea>
+            </label>
             <br><br>
 
             <button type="submit"> Record</button>
