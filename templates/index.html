@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<form action="/tester" method="POST">
+    <button type="submit">Test</button>
+</form>
+
+<body>
+    <main>
+        <header>
+            <h1>BLOOD PRESSURE TRACKER</h1>
+        </header>
+
+        <form  action="/submit_bp" method="POST">
+
+            <label> Date
+                <input name="recorded_at" type="datetime-local" >
+            </label>
+            <br><br>
+
+            <label>SYS
+                <input name="systolic" type="number" placeholder="120" required>
+            </label>
+            <label>(mmHg)</label>
+            <br><br>
+
+            <label> DIA
+                <input name="diastolic" type="number" placeholder="80" >
+            </label>
+            <label>(mmHg)</label>
+            <br><br>
+
+            <label> Pulse
+                <input name="pulse" type="number" placeholder="72" >
+            </label>
+            <label>(bpm)</label>
+            <br><br>
+
+            <button type="submit"> Record</button>
+            <br><br>
+
+            <img src="{{url_for('static', filename= 'BP.jpg')}}" 
+            alt="Blood pressure testing" width="300" height="300">
+        
+        </form>
+
+    </main>
+    <footer></footer>
+</body>
+
+</html>
