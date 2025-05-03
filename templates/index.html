@@ -15,27 +15,22 @@
 
         <form  action="/submit_bp" method="POST">
 
-            <label> Password
-                <input name="db_password" type="password" placeholder="Your password" required>     
-            </label>
-            <br><br>
-
             <label>SYS
                 <input name="systolic" type="number" placeholder="120" required>
             </label>
-            <label>(mmHg)</label>
+            <label>mmHg</label>
             <br><br>
 
             <label> DIA
                 <input name="diastolic" type="number" placeholder="80" required>
             </label>
-            <label>(mmHg)</label>
+            <label>mmHg</label>
             <br><br>
 
             <label> Pulse
                 <input name="pulse" type="number" placeholder="72" required>
             </label>
-            <label>(bpm)</label>
+            <label>bpm</label>
             <br><br>
 
             <label>Note
@@ -46,8 +41,8 @@
             <button type="submit"> Record</button>
             <br><br>
 
-            <img src="{{url_for('static', filename= 'BP.jpg')}}" 
-            alt="Blood pressure testing" width="300" height="300">
+            <img src="{{url_for('static', filename= 'blood_pressure_image.jpg')}}" 
+            alt="Blood pressure testing" width="300" height="250">
         
         </form>
 
