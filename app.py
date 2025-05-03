@@ -3,38 +3,47 @@ import mysql.connector
 from mysql.connector import Error
 from datetime import datetime
 
-app = Flask(__name__)
+app = Flask(__name__) 
+file_path = "D:\\MySQL_connection\\Mysql_connectrion.txt"
 
 # Open homepage ("/")
 @app.route("/", methods=["GET"])
 def home():
+    print("Entry the page")
     return render_template("index.html")
+    
 
 # Fill data on main page
 @app.route("/submit_bp", methods=["POST"])
 def submit_bp():
-
-    # Get data from form
-    # recorded_at = datetime.strptime(date, "%Y-%m-%dT%H:%M")  
     systolic = request.form["systolic"]
     diastolic = request.form["diastolic"]
     pulse = request.form["pulse"]
     note = request.form["note"]
-
     recorded_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
 # Store data to MySQL
-    password_Str = request.form["db_password"]
 
+    conn_info = {}
     try:
+        # Open MySQL connection file
+    
+        with open(file_path, "r") as file:
+            for line in file:
+                if "=" in line :
+                    key, value = line.strip().split("=", 1)
+                    key = key.strip()
+                    value = value.strip().strip('"')
+                    conn_info[key] = value
+                
     # Connect to MySQL
         db = mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password=password_Str,
-        database="health_tracker"  
-    )
-
+            host = conn_info["host"],
+            user = conn_info["user"],
+            password = conn_info["password"],
+            database = conn_info["database"]
+        )
+    
         if db.is_connected():
             print("Successfully connected to MySQL!")
   
@@ -58,10 +67,4 @@ def submit_bp():
 
     except Error as e:
         print(f"Error while connecting to MySQL: {e}")
-        return "Database Error", 500
-
-
-
-
-
-
+        return "Database Error: {e}", 500
