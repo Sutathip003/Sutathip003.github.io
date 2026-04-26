@@ -3,12 +3,638 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My New Website</title>
+  <title>Thip's Portfolio</title>
+  <style>
+    :root {
+      --bg: #07111f;
+      --bg-soft: #0d1b2f;
+      --panel: rgba(13, 27, 47, 0.72);
+      --text: #d6e4ff;
+      --muted: #8aa0bf;
+      --accent: #64ffda;
+      --accent-soft: rgba(100, 255, 218, 0.12);
+      --line: rgba(138, 160, 191, 0.18);
+      --shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(100, 255, 218, 0.09), transparent 32%),
+        radial-gradient(circle at bottom right, rgba(84, 140, 255, 0.14), transparent 26%),
+        linear-gradient(180deg, #081221 0%, var(--bg) 100%);
+    }
+
+    .cursor-glow {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 520px;
+      height: 520px;
+      border-radius: 50%;
+      pointer-events: none;
+      background: radial-gradient(circle, rgba(100, 255, 218, 0.12), transparent 42%);
+      transform: translate3d(calc(50vw - 260px), calc(50vh - 260px), 0);
+      will-change: transform;
+      z-index: 0;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .page {
+      width: min(1180px, calc(100% - 48px));
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: minmax(280px, 420px) minmax(0, 1fr);
+      gap: 56px;
+      padding: 0 0 48px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 72px 0 48px;
+    }
+
+    .intro h1 {
+      margin: 0;
+      font-size: clamp(2.8rem, 6vw, 4.6rem);
+      line-height: 0.92;
+      letter-spacing: -0.05em;
+    }
+
+    .intro h2 {
+      margin: 16px 0 0;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .intro p {
+      max-width: 22rem;
+      margin: 18px 0 0;
+      line-height: 1.7;
+      color: var(--muted);
+    }
+
+    .rail-nav {
+      margin-top: 44px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .rail-nav a {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      width: fit-content;
+      color: var(--muted);
+      font-size: 0.82rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      transition: color 180ms ease, transform 180ms ease;
+    }
+
+    .rail-nav a::before {
+      content: "";
+      width: 34px;
+      height: 1px;
+      background: var(--muted);
+      transition: width 180ms ease, background 180ms ease;
+    }
+
+    .rail-nav a:hover,
+    .rail-nav a:focus-visible,
+    .social-links a:hover,
+    .social-links a:focus-visible,
+    .card:hover h3,
+    .card:focus-within h3 {
+      color: var(--accent);
+    }
+
+    .rail-nav a:hover::before,
+    .rail-nav a:focus-visible::before {
+      width: 64px;
+      background: var(--accent);
+    }
+
+    .social-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+    }
+
+    .social-item {
+      position: relative;
+    }
+
+    .social-links a {
+      color: var(--muted);
+      font-size: 0.95rem;
+      transition: color 180ms ease, transform 180ms ease;
+    }
+
+    .social-links a:hover,
+    .social-links a:focus-visible {
+      transform: translateY(-2px);
+    }
+
+    .social-links .is-copied {
+      color: var(--accent);
+    }
+
+    .email-popover {
+      position: absolute;
+      left: 0;
+      bottom: calc(100% + 14px);
+      min-width: 260px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(13, 27, 47, 0.96);
+      box-shadow: var(--shadow);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(8px);
+      transition: opacity 160ms ease, transform 160ms ease, visibility 160ms ease;
+    }
+
+    .email-popover.is-open {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .email-popover p {
+      margin: 0 0 10px;
+      color: var(--text);
+      font-size: 0.92rem;
+      word-break: break-word;
+    }
+
+    .copy-button {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      padding: 8px 12px;
+      font: inherit;
+      cursor: pointer;
+      transition: background 180ms ease, transform 180ms ease;
+    }
+
+    .copy-button:hover,
+    .copy-button:focus-visible {
+      background: rgba(100, 255, 218, 0.2);
+      transform: translateY(-1px);
+    }
+
+    .content {
+      padding: 72px 0 0;
+    }
+
+    section {
+      padding: 0 0 72px;
+    }
+
+    .section-label {
+      display: none;
+    }
+
+    .lead,
+    .copy {
+      color: var(--muted);
+      line-height: 1.8;
+      font-size: 1rem;
+    }
+
+    .lead strong,
+    .copy strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .stack {
+      display: grid;
+      gap: 18px;
+      margin-top: 24px;
+    }
+
+    .card {
+      display: grid;
+      grid-template-columns: 140px minmax(0, 1fr);
+      gap: 20px;
+      padding: 22px;
+      border: 1px solid transparent;
+      border-radius: 18px;
+      background: transparent;
+      transition: transform 180ms ease, border-color 180ms ease, background 180ms ease, box-shadow 180ms ease;
+    }
+
+    .card:hover,
+    .card:focus-within {
+      transform: translateY(-2px);
+      border-color: var(--line);
+      background: var(--panel);
+      box-shadow: var(--shadow);
+    }
+
+    .eyebrow {
+      margin: 2px 0 0;
+      color: var(--muted);
+      font-size: 0.82rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .card h3 {
+      margin: 0;
+      font-size: 1.12rem;
+      transition: color 180ms ease;
+    }
+
+    .card p {
+      margin: 12px 0 0;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 16px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .tags li {
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 0.82rem;
+    }
+
+    .footer-note {
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.7;
+    }
+
+    @media (max-width: 920px) {
+      .page {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+
+      .sidebar {
+        position: relative;
+        height: auto;
+        padding: 48px 0 20px;
+      }
+
+      .content {
+        padding-top: 16px;
+      }
+
+      .section-label {
+        display: block;
+        margin: 0 0 18px;
+        color: var(--text);
+        font-size: 0.85rem;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .page {
+        width: min(100% - 32px, 1180px);
+      }
+
+      .card {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        padding: 18px;
+      }
+
+      .rail-nav {
+        gap: 12px;
+      }
+    }
+  </style>
 </head>
 <body>
-  <main>
-    <h1>My New Website</h1>
-    <p>This site has been reset and is ready for a fresh start.</p>
+  <div class="cursor-glow" aria-hidden="true"></div>
+  <main class="page">
+    <aside class="sidebar">
+      <div>
+        <div class="intro">
+          <h1>Sutathip Patience</h1>
+          <h2>Data Scientist transitioning from Medical Technology.</h2>
+          <p>
+            Data Scientist with a medical background, building intelligent systems to
+            support better clinical decisions.
+          </p>
+        </div>
+
+        <nav class="rail-nav" aria-label="Section navigation">
+          <a href="#about">About</a>
+          <a href="#experience">Experience</a>
+          <a href="#portfolio">Portfolio</a>
+          <a href="#skills">Skills</a>
+          <a href="#education">Education</a>
+          <a href="#contact">Contact</a>
+        </nav>
+      </div>
+
+      <div class="social-links" aria-label="Social links">
+        <div class="social-item">
+          <div class="email-popover" id="email-popover" aria-hidden="true">
+            <p>sutathippatience1@gmail.com</p>
+            <button class="copy-button" id="copy-email-button" type="button">Copy email</button>
+          </div>
+          <a href="mailto:sutathippatience1@gmail.com" id="email-link">Email</a>
+        </div>
+        <a href="https://github.com/sutathip003" target="_blank" rel="noreferrer">GitHub</a>
+        <a href="#contact">Portfolio</a>
+      </div>
+    </aside>
+
+    <div class="content">
+      <section id="about" aria-labelledby="about-title">
+        <p class="section-label">About</p>
+        <div class="lead">
+          <p id="about-title">
+            I am a former <strong>medical technologist transitioning into data science</strong>,
+            with a strong foundation in clinical data and healthcare systems. My background
+            allows me to deeply understand medical data, patient risk factors, and real-world
+            healthcare challenges.
+          </p>
+          <p>
+            I specialize in building end-to-end machine learning systems, from data cleaning
+            and feature engineering to model deployment and user-facing applications.
+            Currently, I am focused on developing practical data science projects,
+            particularly in healthcare, to bridge the gap between data and clinical
+            decision-making.
+          </p>
+        </div>
+      </section>
+
+      <section id="experience" aria-labelledby="experience-title">
+        <p class="section-label">Experience</p>
+        <div class="stack">
+          <article class="card">
+            <p class="eyebrow">Clinical Experience</p>
+            <div>
+              <h3 id="experience-title">Medical Technologist</h3>
+              <p>
+                Worked in a clinical laboratory environment analyzing patient samples and
+                ensuring accuracy in diagnostic results. Developed strong attention to detail,
+                data integrity awareness, and a practical understanding of clinical metrics.
+                This experience directly informs my work in healthcare data science,
+                especially in building models that prioritize patient safety and minimize
+                false negatives.
+              </p>
+              <ul class="tags">
+                <li>Clinical Data</li>
+                <li>Diagnostics</li>
+                <li>Patient Safety</li>
+              </ul>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section id="portfolio" aria-labelledby="portfolio-title">
+        <p class="section-label">Portfolio</p>
+        <div class="stack">
+          <article class="card">
+            <p class="eyebrow">Featured Project</p>
+            <div>
+              <h3 id="portfolio-title">Heart Disease Risk Prediction System</h3>
+              <p>
+                Built an end-to-end machine learning system to predict heart disease risk
+                using clinical patient data. The project covers data cleaning, feature
+                engineering, model training, evaluation, and deployment through a simple
+                clinical web interface.
+              </p>
+              <p>
+                Designed with a medical mindset to minimize missed diagnoses, using
+                threshold optimization with F2-score to prioritize recall in healthcare
+                screening scenarios.
+              </p>
+              <ul class="tags">
+                <li>Python</li>
+                <li>Scikit-learn</li>
+                <li>XGBoost</li>
+                <li>Pandas</li>
+                <li>Flask</li>
+              </ul>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section id="skills" aria-labelledby="skills-title">
+        <p class="section-label">Skills</p>
+        <div class="stack">
+          <article class="card">
+            <p class="eyebrow">Languages</p>
+            <div>
+              <h3 id="skills-title">Python and SQL</h3>
+              <p>
+                Comfortable using Python and SQL for data analysis, model development,
+                and working with structured healthcare data.
+              </p>
+              <ul class="tags">
+                <li>Python</li>
+                <li>SQL</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="card">
+            <p class="eyebrow">Data Science</p>
+            <div>
+              <h3>Machine Learning and Analysis</h3>
+              <p>
+                Practical experience with classification workflows, model evaluation,
+                feature engineering, data cleaning, preprocessing, and exploratory analysis.
+              </p>
+              <ul class="tags">
+                <li>Classification</li>
+                <li>Model Evaluation</li>
+                <li>Feature Engineering</li>
+                <li>EDA</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="card">
+            <p class="eyebrow">Libraries and Tools</p>
+            <div>
+              <h3>Applied Toolkit</h3>
+              <p>
+                Working stack for experimentation, training, visualization, and shipping
+                practical data products.
+              </p>
+              <ul class="tags">
+                <li>Pandas</li>
+                <li>NumPy</li>
+                <li>Scikit-learn</li>
+                <li>XGBoost</li>
+                <li>Matplotlib</li>
+                <li>Seaborn</li>
+                <li>Flask</li>
+                <li>Jinja2</li>
+                <li>Git & GitHub</li>
+                <li>VS Code</li>
+                <li>Jupyter Notebook</li>
+              </ul>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section id="education" aria-labelledby="education-title">
+        <p class="section-label">Education</p>
+        <div class="stack">
+          <article class="card">
+            <p class="eyebrow">Ongoing</p>
+            <div>
+              <h3 id="education-title">Self-Directed Data Science Development</h3>
+              <p>
+                Continuing to deepen practical data science skills through hands-on healthcare
+                projects, model experimentation, deployment work, and focused study in
+                real-world machine learning workflows.
+              </p>
+              <ul class="tags">
+                <li>Healthcare Data Science</li>
+                <li>Machine Learning</li>
+                <li>Applied Projects</li>
+              </ul>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section id="contact" aria-labelledby="contact-title">
+        <p class="section-label">Contact</p>
+        <div class="lead">
+          <p id="contact-title">
+            I approach data science from a <strong>real-world problem-solving perspective</strong>,
+            especially in healthcare where decisions directly affect people&apos;s lives. I focus
+            not only on model accuracy, but also on interpretability and risk reduction,
+            prioritizing recall in medical models so high-risk patients are less likely to be
+            overlooked.
+          </p>
+          <p class="footer-note">
+            I&apos;m currently looking for opportunities in data science, especially in
+            healthcare-related roles. Let&apos;s connect.
+          </p>
+          <p class="footer-note">
+            Email: <a href="mailto:sutathippatience1@gmail.com">sutathippatience1@gmail.com</a><br>
+            GitHub: <a href="https://github.com/sutathip003" target="_blank" rel="noreferrer">github.com/sutathip003</a>
+          </p>
+        </div>
+      </section>
+    </div>
   </main>
+  <script>
+    const glow = document.querySelector(".cursor-glow");
+    const emailLink = document.querySelector("#email-link");
+    const emailPopover = document.querySelector("#email-popover");
+    const copyEmailButton = document.querySelector("#copy-email-button");
+    const emailAddress = "sutathippatience1@gmail.com";
+    let pointerX = window.innerWidth / 2;
+    let pointerY = window.innerHeight / 2;
+    let frameRequested = false;
+
+    function paintGlow() {
+      glow.style.transform =
+        "translate3d(" + (pointerX - 260) + "px, " + (pointerY - 260) + "px, 0)";
+      frameRequested = false;
+    }
+
+    window.addEventListener("pointermove", (event) => {
+      pointerX = event.clientX;
+      pointerY = event.clientY;
+
+      if (!frameRequested) {
+        frameRequested = true;
+        window.requestAnimationFrame(paintGlow);
+      }
+    });
+
+    function openEmailPopover() {
+      emailPopover.classList.add("is-open");
+      emailPopover.setAttribute("aria-hidden", "false");
+    }
+
+    function closeEmailPopover() {
+      emailPopover.classList.remove("is-open");
+      emailPopover.setAttribute("aria-hidden", "true");
+      copyEmailButton.textContent = "Copy email";
+      emailLink.classList.remove("is-copied");
+    }
+
+    emailLink.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+
+      if (emailPopover.classList.contains("is-open")) {
+        closeEmailPopover();
+        return;
+      }
+
+      openEmailPopover();
+    });
+
+    copyEmailButton.addEventListener("click", async (event) => {
+      event.stopPropagation();
+
+      try {
+        await navigator.clipboard.writeText(emailAddress);
+        copyEmailButton.textContent = "Copied";
+        emailLink.classList.add("is-copied");
+      } catch (error) {
+        window.location.href = "mailto:" + emailAddress;
+      }
+    });
+
+    document.addEventListener("click", (event) => {
+      if (!emailPopover.classList.contains("is-open")) {
+        return;
+      }
+
+      if (event.target === emailLink || emailPopover.contains(event.target)) {
+        return;
+      }
+
+      closeEmailPopover();
+    });
+  </script>
 </body>
 </html>
